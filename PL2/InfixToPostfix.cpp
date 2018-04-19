@@ -175,67 +175,104 @@ int InfixToPostfix::check_err_after_program(int index){
 
 //읽은 마지막 index 리턴 err시 해당 errnum 
 //열린 괄호인가?
+
 int InfixToPostfix::Is_open_parentheses(int index){
 	int i;
 	//이 식의 op
 	int this_op_num;
-	//seq 0: <term> 
-	//seq 1: <fun>
+	//seq 0: <fun> 
+	//seq 1: <term>
 	//seq 2: <term>
 	//seq 3: )
 	tmp_str.AppendChar(tmpbuf[index]);
-	//seq 0: <term> 
+	//seq 0: <fun> 
 	for (i = index + 1; i < len; i++){
-
 		//공백 넘기기
 		if (tmpbuf[i] == ' ' || tmpbuf[i] == '\t'){
-			continue;
+		continue;
 		}
-		//재귀적으로 호출
-		else if (tmpbuf[i] == '('){
-			i = Is_open_parentheses(i);
-			if (errnum){
-				return i;
-			}
-			i++;
-			break;
-		}
-		//변수 인지 확인
 		else if (isalpha(tmpbuf[i])){
-			i = Is_val(i);
-			if (errnum){
-				return i;
-			}
-			i++;
-			break;
+		i = Is_op(i);
+		if (errnum){
+		return i;
 		}
-		//상수 인지 확인
-		else if (isdigit(tmpbuf[i])){
-			i = Is_con(i);
-			if (errnum){
-				return i;
-			}
-			i++;
-			break;
-		}
-		//마이너스 상수 인지 확인
-		else if (tmpbuf[i] == '-'){
-			i = Is_minus_con(i);
-			if (errnum){
-				return i;
-			}
-			i++;
-			break;
+		i++;
+		//이 식의 op num 기록
+		this_op_num = current_opnum;
+		break;
 		}
 		//잘못된 위치의 괄호
 		else if (tmpbuf[i] == ')'){
-			errnum = 2;
-			return i;
+		errnum = 2;
+		return i;
 		}
 		//잘못된 기호 들어옴
 		else{
-			errnum = 3;
-			return i;
+		if (isdigit(tmpbuf[i]))
+		errnum = 4;
+		else
+		errnum = 3;
+		return i;
+		}
+		}
+		//term 안나오고 문장 끝
+		if (i == len){
+		errnum = 2;
+		return i - 1;
+		}
+		//tmp_str.AppendChar(' ');
+		//seq 2: <term>
+		for (; i < len; i++){
+
+		//공백 넘기기
+		if (tmpbuf[i] == ' ' || tmpbuf[i] == '\t'){
+		continue;
+		}
+		//재귀적으로 호출
+		else if (tmpbuf[i] == '('){
+		i = Is_open_parentheses(i);
+		if (errnum){
+		return i;
+		}
+		i++;
+		break;
+		}
+		//변수 인지 확인
+		else if (isalpha(tmpbuf[i])){
+		i = Is_val(i);
+		if (errnum){
+		return i;
+		}
+		i++;
+		break;
+		}
+		//상수 인지 확인
+		else if (isdigit(tmpbuf[i])){
+		i = Is_con(i);
+		if (errnum){
+		return i;
+		}
+		i++;
+		break;
+		}
+		//마이너스 상수 인지 확인
+		else if (tmpbuf[i] == '-'){
+		i = Is_minus_con(i);
+		if (errnum){
+		return i;
+		}
+		i++;
+		break;
+		}
+		//잘못된 위치의 괄호
+		else if (tmpbuf[i] == ')'){
+		errnum = 2;
+		return i;
+		}
+		//잘못된 기호 들어옴
+		else{
+		errnum = 3;
+		return i;
 		}
 	}
 	//문장이 (나오고 끝남
@@ -244,93 +281,55 @@ int InfixToPostfix::Is_open_parentheses(int index){
 		return i - 1;
 	}
 
-	//seq 1: <fun>
+	//seq 1: <term>
 	for (; i < len; i++){
 
-		//공백 넘기기
-		if (tmpbuf[i] == ' ' || tmpbuf[i] == '\t'){
-			continue;
-		}
-		else if (isalpha(tmpbuf[i])){
-			i = Is_op(i);
-			if (errnum){
-				return i;
-			}
-			i++;
-			//이 식의 op num 기록
-			this_op_num = current_opnum;
-			break;
-		}
-		//잘못된 위치의 괄호
-		else if (tmpbuf[i] == ')'){
-			errnum = 2;
-			return i;
-		}
-		//잘못된 기호 들어옴
-		else{
-			if (isdigit(tmpbuf[i]))
-				errnum = 4;
-			else
-				errnum = 3;
-			return i;
-		}
-	}
-	//term 안나오고 문장 끝
-	if (i == len){
-		errnum = 2;
-		return i - 1;
-	}
-	tmp_str.AppendChar(' ');
-	//seq 2: <term>
-	for (; i < len; i++){
-
-		//공백 넘기기
-		if (tmpbuf[i] == ' ' || tmpbuf[i] == '\t'){
+		if (tmpbuf[i] == ' ' || tmpbuf[i] == '\t') {
 			continue;
 		}
 		//재귀적으로 호출
-		else if (tmpbuf[i] == '('){
+		else if (tmpbuf[i] == '(') {
 			i = Is_open_parentheses(i);
-			if (errnum){
+			if (errnum) {
 				return i;
 			}
 			i++;
 			break;
 		}
 		//변수 인지 확인
-		else if (isalpha(tmpbuf[i])){
+		else if (isalpha(tmpbuf[i])) {
 			i = Is_val(i);
-			if (errnum){
+			if (errnum) {
 				return i;
 			}
 			i++;
 			break;
 		}
 		//상수 인지 확인
-		else if (isdigit(tmpbuf[i])){
+		else if (isdigit(tmpbuf[i])) {
 			i = Is_con(i);
-			if (errnum){
+			if (errnum) {
 				return i;
 			}
 			i++;
 			break;
 		}
 		//마이너스 상수 인지 확인
-		else if (tmpbuf[i] == '-'){
+		else if (tmpbuf[i] == '-') {
 			i = Is_minus_con(i);
-			if (errnum){
+			if (errnum) {
 				return i;
 			}
 			i++;
 			break;
 		}
 		//잘못된 위치의 괄호
-		else if (tmpbuf[i] == ')'){
+		else if (tmpbuf[i] == ')') {
 			errnum = 2;
 			return i;
 		}
 		//잘못된 기호 들어옴
-		else{
+		else {
 			errnum = 3;
 			return i;
 		}
@@ -350,9 +349,9 @@ int InfixToPostfix::Is_open_parentheses(int index){
 			continue;
 		}
 		else if (tmpbuf[i] == ')'){
-			tmp_str.AppendChar(' ');
 			tmp_str.Append(oper[this_op_num]);
 			tmp_str.AppendChar(tmpbuf[i]);
+			tmp_str.AppendChar(' ');//마지막에 공백을 넣어야 term끼리 구분 가능
 			return i;
 		}
 		//괄호 잘못됨
@@ -383,6 +382,7 @@ int InfixToPostfix::Is_val(int index){
 			return index;
 		}
 		tmp_str.AppendChar(tmpbuf[index]);
+		tmp_str.AppendChar(' ');
 	}
 
 	return index - 1;
@@ -412,6 +412,7 @@ int InfixToPostfix::Is_con(int index){
 			return index;
 		}
 		tmp_str.AppendChar(tmpbuf[index]);
+		tmp_str.AppendChar(' ');
 	}
 	return index - 1;
 }
