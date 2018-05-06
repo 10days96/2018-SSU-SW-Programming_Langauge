@@ -414,7 +414,7 @@ void CPL2Dlg::OnBnClickedButton5()
 	//중간코드로 변환된 것 있을 때
 	if (tointermediate != NULL){
 		//파일 경로 불러오기 위한 CFileDialog class 
-		CFileDialog fDlg(false, _T("txt"), _T("inteCode.txt"), OFN_OVERWRITEPROMPT, _T("텍스트파일(*.txt)|*.txt|"));
+		CFileDialog fDlg(false, _T("txt"), _T("interCode.txt"), OFN_OVERWRITEPROMPT, _T("텍스트파일(*.txt)|*.txt|"));
 
 		//다이얼로그 호출
 		if (IDOK == fDlg.DoModal())
