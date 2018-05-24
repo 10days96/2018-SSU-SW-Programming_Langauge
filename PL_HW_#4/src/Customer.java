@@ -11,7 +11,6 @@ public class Customer implements Serializable{
       this.customer_num = customer_num;
       this.phone_number = phone_number;
       this.date = date;
-      count = 0;
   }
   public String  getCustomer_num(){
       return customer_num;
@@ -29,7 +28,13 @@ public class Customer implements Serializable{
   public int getCount(){
       return count;
   }
+  public void setCount(int c){
+      count = c;
+  }
   public void setCount(){
       count++;
+  }
+  public void resetCount(){
+      count = 0;
   }
 }

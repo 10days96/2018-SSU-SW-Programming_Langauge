@@ -42,9 +42,6 @@ class JPanel01 extends JPanel implements  ActionListener{
         jTextField1.setBounds(400,120,250,50);
         jTextField2.setBounds(400,220,250,50);
 
-
-        //jTextField1.setText("123");
-
         jTextField1.setEditable(true);
         jTextField2.setEditable(true);
 
@@ -60,6 +57,39 @@ class JPanel01 extends JPanel implements  ActionListener{
         jButton1.addActionListener(this);
         jButton2.addActionListener(this);
         jCombo.addActionListener(this);
+    }
+    public String getcustomerNum(){
+        String c_num = jTextField2.getText().trim();
+        return c_num;
+    }
+    public String get_order_date(){
+        String date = jTextField1.getText().trim();
+        return date;
+    }
+    public String get_menu(){
+        String menu = jCombo.getSelectedItem().toString();
+        return menu;
+    }
+    public void setcustomerNum(String num){
+        jTextField1.setText(num);
+    }
+    public void set_order_date(String date){
+        jTextField2.setText(date);
+    }
+    public void setjCombo(){
+        jCombo.setSelectedIndex(0);
+    }
+    public void setjCombo(String m){
+        if(m.equals("김밥"))
+            jCombo.setSelectedIndex(0);
+        if(m.equals("떡볶이"))
+            jCombo.setSelectedIndex(1);
+        if(m.equals("순대"))
+            jCombo.setSelectedIndex(2);
+        if(m.equals("오뎅"))
+            jCombo.setSelectedIndex(3);
+        if(m.equals("튀김"))
+            jCombo.setSelectedIndex(4);
     }
 
     public void actionPerformed(ActionEvent e){
