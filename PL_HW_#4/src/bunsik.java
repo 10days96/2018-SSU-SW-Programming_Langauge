@@ -9,18 +9,17 @@ class JPanel01 extends JPanel implements  ActionListener{
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JLabel jLabel3;
-    private JScrollPane jScrollPane1;
-    private JTextArea jTextArea1;
-    private JTextArea jTextArea2;
+    //private JScrollPane jScrollPane1;
+    private JTextField jTextField1;
+    private JTextField jTextField2;
     private JComboBox jCombo;
     private int  button_num;
     private String[] menu = {"김밥","떡볶이","순대","오뎅","튀김"};
     private bunsik  b;
 
     public JPanel01(bunsik b){
-        this.b = b;
+        this.b = b;;
         setLayout(null);
-
         jButton1 = new JButton("주문");
         jButton2 = new JButton("주문취소");
         jButton1.setSize(250,65);
@@ -35,26 +34,27 @@ class JPanel01 extends JPanel implements  ActionListener{
         jLabel2.setBounds(200,200,100,100);
         jLabel3.setBounds(200,300,100,100);
 
-        jTextArea1 = new JTextArea();
-        jTextArea1.setEditable(true);
-        JScrollPane scrollPane1 = new JScrollPane(jTextArea1);
-        scrollPane1.setBounds(400,120,250,50);
-
-        jTextArea2 = new JTextArea();
-        jTextArea2.setEditable(true);
-        JScrollPane scrollPane2 = new JScrollPane(jTextArea2);
-        scrollPane2.setBounds(400,220,250,50);
-
         jCombo = new JComboBox(menu);
         jCombo.setBounds(400,320,250,40);
+
+        jTextField1 = new JTextField(13);
+        jTextField2 = new JTextField(10);
+        jTextField1.setBounds(400,120,250,50);
+        jTextField2.setBounds(400,220,250,50);
+
+
+        //jTextField1.setText("123");
+
+        jTextField1.setEditable(true);
+        jTextField2.setEditable(true);
 
         add(jButton1);
         add(jButton2);
         add(jLabel1);
         add(jLabel2);
         add(jLabel3);
-        add(scrollPane1);
-        add(scrollPane2);
+        add(jTextField1);
+        add(jTextField2);
         add(jCombo);
 
         jButton1.addActionListener(this);
@@ -67,17 +67,17 @@ class JPanel01 extends JPanel implements  ActionListener{
             Runnable r = new myThread(b,1);
             Thread t = new Thread(r);
             t.start();
-            JOptionPane.showMessageDialog(this,"주문완료");
         }
 
         if(e.getSource().equals(jButton2)){
-            JOptionPane.showMessageDialog(this,"주문취소");
-
+            Runnable r = new myThread(b,2);
+            Thread t = new Thread(r);
+            t.start();
         }
     }
 }
 
-class JPanel02 extends JPanel{
+class JPanel02 extends JPanel implements ActionListener{
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JLabel jLabel3;
@@ -87,12 +87,14 @@ class JPanel02 extends JPanel{
     private JButton jButton2;
     private JButton jButton3;
     private JScrollPane jScrollPane1;
-    private JTextArea jTextArea1;
-    private JTextArea jTextArea2;
-    private JTextArea jTextArea3;
-    private JTextArea jTextArea4;
+    private JTextField jTextField1;
+    private JTextField jTextField2;
+    private JTextField jTextField3;
+    private JTextField jTextField4;
+
     private int button_num;
     private bunsik b;
+
 
     public JPanel02(bunsik b){
         this.b = b;
@@ -118,25 +120,15 @@ class JPanel02 extends JPanel{
         jLabel3.setBounds(200,250,100,100);
         jLabel4.setBounds(200,350,100,100);
 
-        jTextArea1 = new JTextArea();
-        jTextArea1.setEditable(true);
-        JScrollPane scrollPane1 = new JScrollPane(jTextArea1);
-        scrollPane1.setBounds(400,70,250,50);
+        jTextField1 = new JTextField(4);
+        jTextField2 = new JTextField(10);
+        jTextField3 = new JTextField(13);
+        jTextField4 = new JTextField(10);
 
-        jTextArea2 = new JTextArea();
-        jTextArea2.setEditable(true);
-        JScrollPane scrollPane2 = new JScrollPane(jTextArea2);
-        scrollPane2.setBounds(400,170,250,50);
-
-        jTextArea3 = new JTextArea();
-        jTextArea3.setEditable(true);
-        JScrollPane scrollPane3 = new JScrollPane(jTextArea3);
-        scrollPane3.setBounds(400,270,250,50);
-
-        jTextArea4 = new JTextArea();
-        jTextArea4.setEditable(true);
-        JScrollPane scrollPane4 = new JScrollPane(jTextArea4);
-        scrollPane4.setBounds(400,370,250,50);
+        jTextField1.setBounds(400,70,250,50);
+        jTextField2.setBounds(400,170,250,50);
+        jTextField3.setBounds(400,270,250,50);
+        jTextField4.setBounds(400,370,250,50);
 
         add(jButton1);
         add(jButton2);
@@ -145,27 +137,66 @@ class JPanel02 extends JPanel{
         add(jLabel2);
         add(jLabel3);
         add(jLabel4);
-        add(scrollPane1);
-        add(scrollPane2);
-        add(scrollPane3);
-        add(scrollPane4);
+        add(jTextField1);
+        add(jTextField2);
+        add(jTextField3);
+        add(jTextField4);
+
+        jButton1.addActionListener(this);
+        jButton2.addActionListener(this);
+        jButton3.addActionListener(this);
     }
 
     public void actionPerformed(ActionEvent e){
         if(e.getSource().equals(jButton1)){
-            Runnable r = new myThread(b,0);
+            Runnable r = new myThread(b,3);
             Thread t = new Thread(r);
             t.start();
-            JOptionPane.showMessageDialog(this,"주문완료");
+            //JOptionPane.showMessageDialog(this,"주문완료");
         }
 
         if(e.getSource().equals(jButton2)){
-            Runnable r = new myThread(b,0);
+            Runnable r = new myThread(b,4);
             Thread t = new Thread(r);
             t.start();
-            JOptionPane.showMessageDialog(this,"주문취소");
+            //JOptionPane.showMessageDialog(this,"주문취소");
+        }
+        if(e.getSource().equals(jButton3)){
+            Runnable r = new myThread(b,5);
+            Thread t = new Thread(r);
+            t.start();
         }
     }
+
+    public String getcusternum(){
+        String c_num = jTextField1.getText().trim();
+        return c_num;
+    }
+    public String getcustername(){
+        String name = jTextField2.getText().trim();
+        return name;
+    }
+    public String getcusterphone(){
+        String phone = jTextField3.getText().trim();
+        return phone;
+    }
+    public String getcusterdate(){
+        String date = jTextField4.getText().trim();
+        return date;
+    }
+    public void setcustomernum(String num){
+        jTextField1.setText(num);
+    }
+    public void setcustomername(String name){
+        jTextField2.setText(name);
+    }
+    public void setcustomerphone(String phone){
+        jTextField3.setText(phone);
+    }
+    public void setcustomerdate(String date){
+        jTextField4.setText(date);
+    }
+
 }
 
 public class bunsik extends  JFrame {
