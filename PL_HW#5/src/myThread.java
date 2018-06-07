@@ -1,6 +1,9 @@
 import javax.swing.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.Date;
 
 public class myThread  implements Runnable{
     private bunsik b;
@@ -15,6 +18,8 @@ public class myThread  implements Runnable{
     private  String customer_date1;
     private String customer_date;
     private int funnum;
+    private String sale_date1;
+    private String sale_date2;
     myThread(bunsik b,int funnum){
         this.b = b;
         this.funnum = funnum;
@@ -25,6 +30,8 @@ public class myThread  implements Runnable{
         name = b.jPanel02.getcustername();
         phone_number = b.jPanel02.getcusterphone();
         customer_date = b.jPanel02.getcusterdate();
+        sale_date1 = b.jPanel03.getDate1();
+        sale_date2 = b.jPanel03.getDate2();
     }
     @Override
     public void run(){
@@ -45,6 +52,9 @@ public class myThread  implements Runnable{
             }
             if(funnum == 5){
                 deletecustomer(customer_num2);
+            }
+            if(funnum == 6){
+                Count();
             }
             saveeorder();
             saveCustomer();
@@ -134,6 +144,72 @@ public class myThread  implements Runnable{
             e.printStackTrace();
         }catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    private void Count() {
+        String[] menu = {"김밥", "떡볶이", "순대", "오뎅", " 튀김", "쿠폰"};
+        String[] str = new String[5];
+        int[] count_num = new int[5];
+        int[] total_menu = new int[5];
+        int[] price = {1500, 3000, 2000, 500, 500};
+        int total = 0;
+        Date d1 = null;
+        Date d2 = null;
+        if(checkErro3() != -1) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            try {
+                d1 = format.parse(sale_date1);
+                d2 = format.parse(sale_date2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < orders.size(); i++) {
+                Date date = null;
+                try {
+                    date = format.parse(orders.get(i).getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                int compare1 = date.compareTo(d1);
+                int compare2 = date.compareTo(d2);
+
+                if (compare1 >= 0 && compare2 <= 0) {
+                    if (orders.get(i).getMenu().equals(menu[0])) {
+                        count_num[0]++;
+                    }
+                    if (orders.get(i).getMenu().equals(menu[1])) {
+                        count_num[1]++;
+                    }
+                    if (orders.get(i).getMenu().equals(menu[2])) {
+                        count_num[2]++;
+                    }
+                    if (orders.get(i).getMenu().equals(menu[3])) {
+                        count_num[3]++;
+                    }
+                    if (orders.get(i).getMenu().equals(menu[4])) {
+                        count_num[4]++;
+                    }
+                    if (orders.get(i).getMenu().equals(menu[5])) {
+                        count_num[5]++;
+                    }
+
+                }
+            }
+
+            for (int i = 0; i < count_num.length; i++) {
+                total_menu[i] = count_num[i] * price[i];
+                total += total_menu[i];
+                str[i] = menu[i] + "\t\t" + count_num[i] + "\t\t" + total_menu[i];
+            }
+            b.jPanel03.SetMenu("메뉴\t\t갯수\t\t매출금액\n");
+            b.jPanel03.SetMenu("==============================\n");
+            for (int i = 0; i < count_num.length; i++) {
+                b.jPanel03.SetMenu(str[i] + "\n");
+            }
+            b.jPanel03.SetMenu("============================\n");
+            b.jPanel03.SetMenu("매출합계\t\t\t" + total + "\n");
+
         }
     }
 
@@ -316,7 +392,15 @@ public class myThread  implements Runnable{
         }catch (Exception e){
             return -1;
         }
-
-
     }
+
+    public int checkErro3(){
+        if( (!sale_date1.matches("^\\d{4}/\\d{2}/\\d{2}$")) || (!sale_date2.matches("^\\d{4}/\\d{2}/\\d{2}$") ) ){
+            JOptionPane.showMessageDialog(null,"날짜형식은 yyyy/MM/dd 입니다");
+            return -1;
+        }
+
+        return 1;
+    }
+
 }

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -229,19 +230,110 @@ class JPanel02 extends JPanel implements ActionListener{
 
 }
 
+class JPanel03 extends JPanel implements ActionListener{
+    private  JLabel jLabel1;
+    private  JLabel jLabel2;
+    private  JLabel jLabel3;
+
+
+    private JButton jButton1;
+    private JButton jButton2;
+
+    private JTextField jTextField1;
+    private JTextField jTextField2;
+    private JTextField jTextField3;
+    private JTextArea jTextArea;
+    private JScrollPane jScrollPane;
+    private  bunsik b ;
+    public JPanel03(bunsik b) {
+        this.b = b;
+        jButton1 = new JButton("조회");
+        jButton2 = new JButton("취소");
+
+        jLabel1 = new JLabel("날짜");
+        jLabel2 = new JLabel("까지");
+        jLabel3 = new JLabel("~");
+
+        jButton1.setSize(250, 60);
+        jButton2.setSize(250, 60);
+
+        jTextField1 = new JTextField(10);
+        jTextField2 = new JTextField(10);
+        jTextField3 = new JTextField();
+        jTextArea = new JTextArea(8,10);
+        jScrollPane = new JScrollPane(jTextArea);
+
+        jTextField3.setSize(300, 200);
+
+        setLayout(null);
+
+        jLabel1.setBounds(150, 100, 50, 60);
+        jTextField1.setBounds(200, 100, 150, 50);
+        jLabel3.setBounds(400, 100, 50, 60);
+        jTextField2.setBounds(460, 100, 150, 50);
+        jLabel2.setBounds(650, 100, 150, 60);
+        jScrollPane.setBounds(150, 200, 550, 200);
+        jButton1.setLocation(150, 450);
+        jButton2.setLocation(450, 450);
+
+        add(jLabel1);
+        add(jTextField1);
+        add(jLabel3);
+        add(jTextField2);
+        add(jLabel2);
+        add(jScrollPane);
+        add(jButton1);
+        add(jButton2);
+
+        jButton1.addActionListener(this);
+        jButton2.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource().equals(jButton1)){
+            Runnable r = new myThread(b,6);
+            Thread t = new Thread(r);
+            t.start();
+        }
+
+        if (e.getSource().equals(jButton2)){
+            Runnable r = new myThread(b,7);
+            Thread t = new Thread(r);
+            t.start();
+        }
+    }
+
+    public String getDate1(){
+        String date1 = jTextField1.getText().trim();
+        return date1;
+    }
+
+    public String getDate2(){
+        String date2 = jTextField2.getText().trim();
+        return date2;
+    }
+    public void SetMenu(String str){
+        jTextArea.append(str);
+    }
+
+}
+
 public class bunsik extends  JFrame {
     public JPanel01 jPanel01 = null;
     public JPanel02 jPanel02 = null;
+    public JPanel03 jPanel03 = null;
     public static void main(String args[]){
         bunsik b = new bunsik();
         b.setTitle("분식점");
         b.jPanel01 = new JPanel01(b);
         b.jPanel02 = new JPanel02(b);
+        b.jPanel03 = new JPanel03(b);
 
         JTabbedPane jtab = new JTabbedPane();
 
         jtab.addTab("주문관리",b.jPanel01);
         jtab.addTab("고객관리",b.jPanel02);
+        jtab.addTab("매출조회",b.jPanel03);
 
         b.add(jtab);
 
