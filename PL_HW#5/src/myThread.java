@@ -20,6 +20,7 @@ public class myThread  implements Runnable{
     private int funnum;
     private String sale_date1;
     private String sale_date2;
+    private int coupon;
     myThread(bunsik b,int funnum){
         this.b = b;
         this.funnum = funnum;
@@ -66,7 +67,6 @@ public class myThread  implements Runnable{
             int index = findCustomer(customer_num);
             if(index != -1){
                 order o = new order(customer_date1,customer_num,menu);
-                orders.add(o);
                 b.jPanel01.set_order_date("");
                 b.jPanel01.setcustomerNum("");
                 b.jPanel01.setjCombo();
@@ -75,7 +75,10 @@ public class myThread  implements Runnable{
                 if(customers.get(index).getCount() == 3){
                     JOptionPane.showMessageDialog(null,customer_num +"고객님 \n무료쿠폰이 배송되었습니다.");
                     customers.get(index).resetCount();
+                    o.setCoupon();
+
                 }
+                orders.add(o);
             }
             else{
                 JOptionPane.showMessageDialog(null,"먼저 고객등록을 해주시기 바랍니다.");
@@ -117,7 +120,9 @@ public class myThread  implements Runnable{
                     String date = orders.get(i).getDate();
                     String num = orders.get(i).getNum();
                     String menu = orders.get(i).getMenu();
-
+                    if(orders.get(i).getCoupon() == 1){
+                        menu = menu + " coupon";
+                    }
                     bw.write(date + " " + num + " "+ menu);
                     bw.newLine();
                 }
@@ -137,6 +142,9 @@ public class myThread  implements Runnable{
             while((line = br.readLine()) != null){
                 String [] str = line.split(" ");
                 order o = new order(str[0], str[1], str[2]);
+                if(str.length == 4){
+                    o.setCoupon();
+                }
                 orders.add(o);
             }
             br.close();
@@ -149,10 +157,10 @@ public class myThread  implements Runnable{
 
     private void Count() {
         String[] menu = {"김밥", "떡볶이", "순대", "오뎅", " 튀김", "쿠폰"};
-        String[] str = new String[5];
-        int[] count_num = new int[5];
-        int[] total_menu = new int[5];
-        int[] price = {1500, 3000, 2000, 500, 500};
+        String[] str = new String[6];
+        int[] count_num = new int[6];
+        int[] total_menu = new int[6];
+        int[] price = {1500, 3000, 2000, 500, 500,0};
         int total = 0;
         Date d1 = null;
         Date d2 = null;
@@ -190,24 +198,28 @@ public class myThread  implements Runnable{
                     if (orders.get(i).getMenu().equals(menu[4])) {
                         count_num[4]++;
                     }
-                    if (orders.get(i).getMenu().equals(menu[5])) {
+                    if (orders.get(i).getCoupon() == 1) {
                         count_num[5]++;
                     }
-
                 }
             }
 
             for (int i = 0; i < count_num.length; i++) {
                 total_menu[i] = count_num[i] * price[i];
                 total += total_menu[i];
-                str[i] = menu[i] + "\t\t" + count_num[i] + "\t\t" + total_menu[i];
+                if(i == 5){
+                    str[i] = menu[i] + "\t\t"+ count_num[i];
+                }
+                else{
+                    str[i] = menu[i] + "\t\t" + count_num[i] + "\t\t" + total_menu[i];
+                }
             }
             b.jPanel03.SetMenu("메뉴\t\t갯수\t\t매출금액\n");
-            b.jPanel03.SetMenu("==============================\n");
+            b.jPanel03.SetMenu("===========================================================\n");
             for (int i = 0; i < count_num.length; i++) {
                 b.jPanel03.SetMenu(str[i] + "\n");
             }
-            b.jPanel03.SetMenu("============================\n");
+            b.jPanel03.SetMenu("===========================================================\n");
             b.jPanel03.SetMenu("매출합계\t\t\t" + total + "\n");
 
         }
